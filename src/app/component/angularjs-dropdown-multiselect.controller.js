@@ -52,6 +52,7 @@ export default function dropdownMultiselectController(
 		onMaxSelectionReached: angular.noop,
 		onSelectionChanged: angular.noop,
 		onClose: angular.noop,
+		onOpen : angular.noop
 	};
 
 	const settings = {
@@ -136,6 +137,7 @@ export default function dropdownMultiselectController(
 		texts,
 		input,
 		close,
+		open,
 		selectCurrentGroup,
 		getGroupLabel,
 		getButtonText,
@@ -167,7 +169,9 @@ export default function dropdownMultiselectController(
 	function toggleDropdown() {
 		if ($scope.open) {
 			$scope.close();
-		} else { $scope.open = true; }
+		} else { 
+			$scope.open(); 
+		}
 		if ($scope.settings.keyboardControls) {
 			if ($scope.open) {
 				if ($scope.settings.selectionLimit === 1 && $scope.settings.enableSearch) {
@@ -193,6 +197,11 @@ export default function dropdownMultiselectController(
 		$event.stopImmediatePropagation();
 	}
 
+	function open() {
+		$scope.open = true;
+		$scope.externalEvents.onOpen();
+	}
+	
 	function close() {
 		$scope.open = false;
 		$scope.input.searchFilter = $scope.settings.clearSearchOnClose ? '' : $scope.input.searchFilter;
